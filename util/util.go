@@ -6,11 +6,7 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
-	"github.com/aymerick/raymond"
 	"github.com/gin-gonic/gin"
-	"github.com/samuel/go-thrift/parser"
-	"github.com/weiyinfu/TwoManZeroSumGame/back/log"
-	"go.mongodb.org/mongo-driver/bson"
 	"os"
 	"strconv"
 	"strings"
@@ -122,7 +118,7 @@ func J(x interface{}) string {
 func Bind(c *gin.Context, x interface{}) error {
 	data, e := c.GetRawData()
 	if e != nil {
-		log.Logger.Infof("getRawDataError")
+		Logger.Infof("getRawDataError")
 		return e
 	}
 	e = json.Unmarshal(data, x)
@@ -134,22 +130,4 @@ func CopyIntMap(ma map[int]int) map[int]int {
 		a[k] = v
 	}
 	return a
-}
-
-func ParseThrift(filepath string) map[string]*parser.Thrift {
-	p := parser.Parser{}
-	file2content, thriftPath, err := p.ParseFile(filepath)
-	if err != nil {
-		log.Logger.Error("parse file error: file=%s,err=%s", thriftPath, err)
-		panic(fmt.Sprintf("parse thrift file error=%v,filepath=%v", err, filepath))
-	}
-	return file2content
-}
-func Format(template string, ctx bson.M) string {
-	//正则表达式检测所有字符串，所有的字符串都应该在ctx中出现
-	s, err := raymond.Render(template, ctx)
-	if err != nil {
-		panic(fmt.Sprintf("render template error :template=%v,error=%v", template, err))
-	}
-	return s
 }
