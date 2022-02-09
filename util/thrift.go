@@ -1,15 +1,14 @@
 package util
 
 import (
-	"fmt"
-	"github.com/samuel/go-thrift/parser"
+	"github.com/cloudwego/thriftgo/parser"
 )
 
-type SS map[string]string
+type SS map[string][]string
 
 func GetAnnotation(annotations []*parser.Annotation, name string) *parser.Annotation {
 	for _, ano := range annotations {
-		if ano.Name == name {
+		if ano.Key == name {
 			return ano
 		}
 	}
@@ -18,16 +17,16 @@ func GetAnnotation(annotations []*parser.Annotation, name string) *parser.Annota
 func BuildAnnotation(annotations SS) []*parser.Annotation {
 	var a []*parser.Annotation
 	for k, v := range annotations {
-		a = append(a, &parser.Annotation{Name: k, Value: v})
+		a = append(a, &parser.Annotation{Key: k, Values: v})
 	}
 	return a
 }
 func GetAnnotationValue(annotations []*parser.Annotation, name string) string {
 	ano := GetAnnotation(annotations, name)
-	if ano == nil {
+	if ano == nil || len(ano.Values) == 0 {
 		return ""
 	}
-	return ano.Value
+	return ano.Values[0]
 }
 func HasAnnotation(annotations []*parser.Annotation, name string) bool {
 	return GetAnnotation(annotations, name) != nil
@@ -46,14 +45,4 @@ func GetUniqueTypes(typeList []*parser.Type) []*parser.Type {
 		}
 	}
 	return typeSet
-}
-
-func ParseThrift(filepath string) map[string]*parser.Thrift {
-	p := parser.Parser{}
-	file2content, thriftPath, err := p.ParseFile(filepath)
-	if err != nil {
-		Logger.Error("parse file error: file=%s,err=%s", thriftPath, err)
-		panic(fmt.Sprintf("parse thrift file error=%v,filepath=%v", err, filepath))
-	}
-	return file2content
 }
