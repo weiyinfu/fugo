@@ -37,9 +37,9 @@ func ArrayEqual(a, b []int) bool {
 }
 
 func ArrayCopy(a []int) []int {
-	var b []int
-	for _, v := range a {
-		b = append(b, v)
+	b := make([]int, len(a))
+	for ind, v := range a {
+		b[ind] = v
 	}
 	return b
 }
@@ -128,7 +128,7 @@ func Bind(c *gin.Context, x interface{}) error {
 	return e
 }
 func CopyIntMap(ma map[int]int) map[int]int {
-	var a map[int]int
+	a := map[int]int{}
 	for k, v := range ma {
 		a[k] = v
 	}

@@ -30,6 +30,7 @@ func Format(template string, ctx bson.M) string {
 }
 func ReverseStringArray(a []string) {
 	for i := 0; i < len(a)/2; i++ {
-		a[i] = a[len(a)-1-i]
+		x, y := i, len(a)-i-1
+		a[x], a[y] = a[y], a[x]
 	}
 }
