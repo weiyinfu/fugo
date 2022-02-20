@@ -5,6 +5,7 @@ go 1.17
 require (
 	github.com/aymerick/raymond v2.0.2+incompatible
 	github.com/gin-gonic/gin v1.7.7
+	github.com/samuel/go-thrift v0.0.0-20210915161234-7b67f98e972f
 	github.com/sirupsen/logrus v1.8.1
 	go.mongodb.org/mongo-driver v1.8.3
 )
